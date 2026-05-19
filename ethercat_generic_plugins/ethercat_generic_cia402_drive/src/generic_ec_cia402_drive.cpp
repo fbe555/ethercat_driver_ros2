@@ -47,8 +47,9 @@ void EcCiA402Drive::updateState()
   initialized_ = is_operational_;
 }
 
-void EcCiA402Drive::processData(size_t entry_idx, uint8_t * domain_address)
+void EcCiA402Drive::processData(unsigned int domain_index, size_t entry_idx, uint8_t * domain_address)
 {
+  (void)domain_index; // TODO add multi-domain-support
   auto index = domain_map_[entry_idx];
   ethercat_interface::EcPdoSingleInterfaceChannelManager * channel_ptr =
     static_cast<
