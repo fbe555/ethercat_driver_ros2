@@ -309,8 +309,17 @@ bool CLASSM::load_from_config(YAML::Node channel_config)
         id = add_command_interface(command_interface_name);
       }
 
+      if (map["addr_offset"]) {
+        v_data[id].addr_offset = map["addr_offset"].as<size_t>();
+      }
+
       if (map["default_value"]) {
         v_data[id].default_value = map["default_value"].as<double>();
+      } else {
+        if (RPDO == pdo_type) {
+          std::string msg = "channel: " + std::to_string(index) + " sub_index: " + std::to_string(sub_index) + " addr_offset: " + std::to_string(v_data[id].addr_offset) + "' has no default value, it is mandatory for RPDO entries";
+          throw std::runtime_error(msg);
+        }
       }
 
       if (map["state_interface"]) {
@@ -322,9 +331,6 @@ bool CLASSM::load_from_config(YAML::Node channel_config)
         id = add_data_without_interface();
       }
 
-      if (map["addr_offset"]) {
-        v_data[id].addr_offset = map["addr_offset"].as<size_t>();
-      }
       if (map["type"]) {
         data_type = map["type"].as<std::string>();
         auto type_idx = typeIdx(data_type);

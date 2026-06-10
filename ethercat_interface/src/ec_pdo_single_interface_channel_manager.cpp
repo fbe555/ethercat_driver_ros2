@@ -102,6 +102,11 @@ bool CLASSM::load_from_config(YAML::Node channel_config)
 
   if (channel_config["default"]) {
     default_value = channel_config["default"].as<double>();
+  } else {
+    if (RPDO == pdo_type) {
+      std::string msg = "channel: " + std::to_string(index) + " sub_index: " + std::to_string(sub_index) + "' has no default value, it is mandatory for RPDO entries";
+      throw std::runtime_error(msg);
+    }
   }
 
   if (channel_config["state_interface"]) {
