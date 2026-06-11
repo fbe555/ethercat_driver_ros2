@@ -300,6 +300,7 @@ bool CLASSM::load_from_config(YAML::Node channel_config)
 
   // Handle data mapping
   if (channel_config["data_mapping"]) {
+    std::size_t i = 0;
     auto data_mapping = channel_config["data_mapping"];
     for (auto map : data_mapping) {
       // Reset the id to skip adding data if no interface is defined
@@ -311,6 +312,9 @@ bool CLASSM::load_from_config(YAML::Node channel_config)
 
       if (map["addr_offset"]) {
         v_data[id].addr_offset = map["addr_offset"].as<size_t>();
+      } else {
+        std::string msg = "channel: " + std::to_string(index) + " sub_index: " + std::to_string(sub_index) + " entry no.: " + std::to_string(i) + "addr_offset is not set, it is mandatory";
+        throw std::runtime_error(msg);
       }
 
       if (map["default"]) {
@@ -363,6 +367,7 @@ bool CLASSM::load_from_config(YAML::Node channel_config)
           return false;
         }
       }
+      i++;
     }
   }
 
