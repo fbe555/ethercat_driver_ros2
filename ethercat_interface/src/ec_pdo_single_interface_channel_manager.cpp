@@ -143,6 +143,9 @@ bool CLASSM::load_from_config(YAML::Node channel_config)
 
 double CLASSM::ec_read(uint8_t * domain_address, size_t /*i*/)
 {
+  if (TPDO != pdo_type) {
+    return;
+  }
   last_value = read_function_(domain_address, mask);
   last_value = factor * last_value + offset;
   if (is_state_interface_defined() ) {
@@ -153,6 +156,9 @@ double CLASSM::ec_read(uint8_t * domain_address, size_t /*i*/)
 
 void CLASSM::ec_read_to_interface(uint8_t * domain_address)
 {
+  if (TPDO != pdo_type) {
+    return;
+  }
   ec_read(domain_address);
   if (is_state_interface_defined() ) {
     state_interface_ptr_->at(state_interface_index_) = last_value;

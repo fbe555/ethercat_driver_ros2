@@ -386,6 +386,9 @@ void CLASSM::setup_managed_interfaces()
 
 double CLASSM::ec_read(uint8_t * domain_address, size_t i)
 {
+  if (TPDO != pdo_type) {
+    return;
+  }
   InterfaceDataWithAddrOffset & d = v_data[i];
   double last_value = read_functions_[i](domain_address + d.addr_offset, d.mask);
   last_value = d.factor * last_value + d.offset;
@@ -400,6 +403,9 @@ void CLASSM::ec_read_to_interface(uint8_t * domain_address)
 {
   for (size_t i = 0; i < managed_.size(); ++i) {
     const size_t idx = managed_[i];
+    if (TPDO != pdo_type) {
+      continue;
+    }
     ec_read(domain_address, idx);
     if (is_state_interface_defined(idx) ) {
       state_interface_ptr_->at(interface_ids_[idx]) = v_data[idx].last_value;
