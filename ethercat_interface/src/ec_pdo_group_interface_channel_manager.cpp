@@ -313,8 +313,8 @@ bool CLASSM::load_from_config(YAML::Node channel_config)
         v_data[id].addr_offset = map["addr_offset"].as<size_t>();
       }
 
-      if (map["default_value"]) {
-        v_data[id].default_value = map["default_value"].as<double>();
+      if (map["default"]) {
+        v_data[id].default_value = map["default"].as<double>();
       } else {
         if (RPDO == pdo_type) {
           std::string msg = "channel: " + std::to_string(index) + " sub_index: " + std::to_string(sub_index) + " addr_offset: " + std::to_string(v_data[id].addr_offset) + "' has no default value, it is mandatory for RPDO entries";
